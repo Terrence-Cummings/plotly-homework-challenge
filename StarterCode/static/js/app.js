@@ -2,37 +2,72 @@
 // Terrence Cummings
 
 
-function unpack(rows, index) {
-    return rows.map(function(row) {
-        return row[index];
-    });
-};
+d3.json("samples.json").then((data) => {
+    let sortedSamples = data.samples.sort((a, b) => parseInt(a.id) - parseInt(b.id));
+    let sortedMetaData = data.metadata.sort((a, b) => a.id - b.id);
+    // sortedMetaData.forEach(addSamples);
 
-function getBBBData() {
-    d3.json("samples.json").then((data) => {
-        let sortedSamples = data.samples.sort((a, b) => parseInt(a.id) - parseInt(b.id));
-        let sortedMetaData = data.metadata.sort((a, b) => a.id - b.id);
-        // sortedMetaData.forEach(addSamples);
-
-        for (i = 0; i < sortedMetaData.length; i++) {
-            sortedMetaData[i].testData = [];
-            for (j = 0; j < sortedSamples[i].otu_ids.length; j++) {
-                sortedMetaData[i].testData[j] = {
-                    'otuID': sortedSamples[i].otu_ids[j],
-                    'otuLabel': sortedSamples[i].otu_labels[j],
-                    'sampleValue': sortedSamples[i].sample_values[j]
-                };
+    for (let i = 0; i < sortedMetaData.length; i++) {
+        sortedMetaData[i].testData = [];
+        for (let j = 0; j < sortedSamples[i].otu_ids.length; j++) {
+            sortedMetaData[i].testData[j] = {
+                'otuID': sortedSamples[i].otu_ids[j],
+                'otuLabel': sortedSamples[i].otu_labels[j],
+                'sampleValue': sortedSamples[i].sample_values[j]
             };
         };
-        // console.log(sortedSamples);
-        // console.log(sortedMetaData);
-    });
+    };
     console.log(sortedMetaData);
 
-};
+    let patientZero = sortedMetaData[0];
+    console.log(patientZero);
+    let sortedTestData = patientZero.testData.sort((a, b) => b.sampleValue - a.sampleValue);
+    console.log(sortedTestData);
+    let topTenTestData = sortedTestData.slice(0, 10).reverse();
+    console.log(topTenTestData);
 
-getBBBData();
+    // Trace1 for the Greek Data
+    let trace1 = {
+        x: topTenTestData.map(object => object.sampleValue),
+        y: topTenTestData.map(object => "OTU " + object.otuID),
+        text: topTenTestData.map(object => object.otuLabel),
+        name: "Belly Button",
+        type: "bar",
+        orientation: "h"
+    };
 
+    // data
+    let data1 = [trace1];
+
+    // Apply the group bar mode to the layout
+    let layout = {
+        title: "Belly Button Bacteria Volunteer " + sortedMetaData[0].id,
+        margin: {
+            l: 100,
+            r: 100,
+            t: 100,
+            b: 100
+        }
+    };
+
+    // Render the plot to the div tag with id "plot"
+    Plotly.newPlot("bar", data1, layout);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+});
 
 // DAY 3, EXERCISE 5 EXAMPLE BELOW HERE
 // function unpack(rows, index) {
