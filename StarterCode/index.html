@@ -22,11 +22,12 @@
             <div class="col-md-2">
                 <div class="well">
                     <h5>Test Subject ID No.:</h5>
-                    <select id="selDataset" onchange="optionChanged(this.value)">
+                    <select id="selDataset">
+                        <option selected disabled>--SELECT</option>
                         <option value="940">940</option>
                         <option value="941">941</option>
                         <option value="943">943</option>
-                        <option value="944">941</option>
+                        <option value="944">944</option>
                         <option value="945">945</option>
                     </select>
                 </div>
@@ -34,7 +35,34 @@
                     <div class="panel-heading">
                         <h3 class="panel-title">Demographic Info</h3>
                     </div>
-                    <div id="sample-metadata" class="panel-body"></div>
+                    <div id="sample-metadata" class="panel-body">
+                        <table>
+                            <tr>
+                                <td id='patientID'></td>
+                            </tr>
+                            <tr>
+                                <td id='ethnicity'></td>
+                            </tr>
+                            <tr>
+                                <td id='gender'></td>
+                            </tr>
+                            <tr>
+                                <td id='age'></td>
+                            </tr>
+                            <tr>
+                                <td id='location'></td>
+                            </tr>
+                            <tr>
+                                <td id='bbtype'></td>
+                            </tr>
+                            <tr>
+                                <td id='wfreq'></td>
+                            </tr>
+                            <tr>
+                                <td id='numsamp'></td>
+                            </tr>
+                        </table>
+                    </div>
                 </div>
             </div>
             <div class="col-md-5">
