@@ -10,27 +10,24 @@ function unpack(rows, index) {
 
 function getBBBData() {
     d3.json("samples.json").then((data) => {
-        let samples = data.samples;
-        let otuIds = [];
-        let sampleValues = [];
-        let otuLabels = [];
-        let i = 0;
-        samples.forEach(test);
+        let sortedSamples = data.samples.sort((a, b) => parseInt(a.id) - parseInt(b.id));
+        let sortedMetaData = data.metadata.sort((a, b) => a.id - b.id);
+        // sortedMetaData.forEach(addSamples);
 
-        function test(sample) {
-            otuIds.push(sample.id);
-            sampleValues.push(sample.sample_values);
-            otuLabels.push(sample.otu_labels);
+        for (i = 0; i < sortedMetaData.length; i++) {
+            sortedMetaData[i].testData = [];
+            for (j = 0; j < sortedSamples[i].otu_ids.length; j++) {
+                sortedMetaData[i].testData[j] = {
+                    'otuID': sortedSamples[i].otu_ids[j],
+                    'otuLabel': sortedSamples[i].otu_labels[j],
+                    'sampleValue': sortedSamples[i].sample_values[j]
+                };
+            };
         };
-        console.log(otuIds);
-        console.log(sampleValues);
-        console.log(otuLabels);
+        // console.log(sortedSamples);
+        // console.log(sortedMetaData);
     });
-};
-
-
-
-function buildBarChart() {
+    console.log(sortedMetaData);
 
 };
 
