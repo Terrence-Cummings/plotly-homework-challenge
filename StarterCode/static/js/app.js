@@ -43,19 +43,16 @@ d3.json("samples.json").then((data) => {
         sel.appendChild(opt);
     };
 
-
     // Listen for dropdown menu selecting the patient number to chart
-    d3.select('#selDataset').on('change', barChart);
+    d3.select('#selDataset').on('change', drawCharts);
 
     // Update the bar chart and the demographic table with the data of the patient selected
-    function barChart() {
+    function drawCharts() {
         // Get the ID of the individual from the dropdown menu value selected
         let inputID = d3.select('#selDataset').node().value;
 
         // Find the array index associated with the individual selected
         let index = sortedMetaData.findIndex(p => p.id == inputID);
-        console.log(index);
-
 
         // Get the demographic data for the individual to display in the table
         let patientZero = sortedMetaData[index];
@@ -67,15 +64,6 @@ d3.json("samples.json").then((data) => {
         let patientBbtype = patientZero.bbtype;
         let patientWfreq = patientZero.wfreq;
         let patientNumSamp = patientZero.testData.length;
-
-        console.log(patientID);
-        console.log(patientEthnic);
-        console.log(patientGender);
-        console.log(patientAge);
-        console.log(patientLocation);
-        console.log(patientBbtype);
-        console.log(patientWfreq);
-        console.log(patientNumSamp);
 
         // Update the demographic table with the individual's data
         d3.select('#patientID').text('id: ' + patientID);
@@ -89,13 +77,12 @@ d3.json("samples.json").then((data) => {
 
         // Sort the sample data of the individual based on descending sample values
         let sortedTestData = patientZero.testData.sort((a, b) => b.sampleValue - a.sampleValue);
-        console.log(sortedTestData);
 
         // Take the top 10 largest sample values. Reverse the order for the horizontal bar chart
         let topTenTestData = sortedTestData.slice(0, 10).reverse();
-        console.log(topTenTestData);
 
-        // Set the trace info for the horizontal bar chart
+        // Begin barchart
+        // Trace for horizontal bar chart
         let trace1 = {
             x: topTenTestData.map(object => object.sampleValue),
             y: topTenTestData.map(object => "OTU " + object.otuID),
@@ -111,18 +98,13 @@ d3.json("samples.json").then((data) => {
         // Bar chart layout
         let layout1 = {
             title: "Top 10 Belly Button Bacteria",
-            // margin: {
-            //     l: 100,
-            //     r: 100,
-            //     t: 100,
-            //     b: 100
-            // }
         };
 
         // Plot the horizontal bar chart for the selected individual
         Plotly.newPlot("bar", data1, layout1);
 
-        // Start bubble chart
+        // Begin bubble chart
+        // Trace for bubble chart
         let trace2 = {
             x: sortedTestData.map(object => object.otuID),
             y: sortedTestData.map(object => object.sampleValue),
@@ -135,21 +117,22 @@ d3.json("samples.json").then((data) => {
             }
         };
 
+        // Convert trace to data
         let data2 = [trace2];
 
+        // Bubble chart layout
         let layout2 = {
             title: 'Belly Button Bacteria',
             showlegend: false,
             xaxis: { title: "OTU ID" },
             yaxis: { title: "OTU Sample Values" }
-            // height: 600,
-            // width: 600
         };
 
+        // Plot bubble chart for the individual
         Plotly.newPlot('bubble', data2, layout2);
 
-        // Start gauge chart
-
+        // Begin gauge chart
+        // Trace for gauge chart
         let traceA = {
             type: "pie",
             showlegend: false,
@@ -172,49 +155,50 @@ d3.json("samples.json").then((data) => {
             hoverinfo: 'skip'
         };
 
+        // Calculate the position of the gauge chart needle
         let degrees = patientWfreq / 9 * 180,
-            radius = .3;
+            radius = .35;
         let radians = (180 - degrees) * Math.PI / 180;
         let x = radius * Math.cos(radians) + 0.5;
         let y = radius * Math.sin(radians) + 0.5;
 
+        // Gauge chart layout
         let layoutA = {
+            // Design of the gauge needle
             shapes: [{
-                type: 'line',
-                x0: 0.5,
-                y0: 0.5,
-                x1: x,
-                y1: y,
-                line: {
-                    color: 'red',
-                    width: 4
+                    type: 'path',
+                    path: 'M .52 .5 L .48 .5 L ' + x + ' ' + y + ' Z',
+                    fillcolor: 'red',
+                    line: {
+                        color: 'red'
+                    }
+                },
+                {
+                    type: 'circle',
+                    // xref: 'x',
+                    // yref: 'y',
+                    fillcolor: 'red',
+                    x0: .48,
+                    y0: .48,
+                    x1: .52,
+                    y1: .52,
+                    line: {
+                        color: 'red'
+                    }
                 }
-            }],
+            ],
             title: 'Belly Button Washing Frequency',
             xaxis: { visible: false, range: [-1, 1] },
             yaxis: { visible: false, range: [-1, 1] }
         };
 
+        // Set data for trace
         let dataA = [traceA];
 
+        // Plot the gauge for the individual
         Plotly.newPlot("gauge", dataA, layoutA, { staticPlot: false });
 
-
-
-
     };
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 });
