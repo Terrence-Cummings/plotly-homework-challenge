@@ -87,18 +87,42 @@ d3.json("samples.json").then((data) => {
         let data1 = [trace1];
 
         // Bar chart layout
-        let layout = {
-            title: "Belly Button Bacteria Volunteer " + sortedMetaData[index].id,
-            margin: {
-                l: 100,
-                r: 100,
-                t: 100,
-                b: 100
-            }
+        let layout1 = {
+            title: "Belly Button Bacteria: Subject ID " + sortedMetaData[index].id,
+            // margin: {
+            //     l: 100,
+            //     r: 100,
+            //     t: 100,
+            //     b: 100
+            // }
         };
 
         // Plot the horizontal bar chart for the selected individual
-        Plotly.newPlot("bar", data1, layout);
+        Plotly.newPlot("bar", data1, layout1);
+
+
+        var trace2 = {
+            x: sortedTestData.map(object => object.otuID),
+            y: sortedTestData.map(object => object.sampleValue),
+            text: sortedTestData.map(object => object.otuLabel),
+            mode: 'markers',
+            marker: {
+                color: sortedTestData.map(object => object.otuID),
+                colorscale: 'Earth',
+                size: sortedTestData.map(object => object.sampleValue)
+            }
+        };
+
+        var data2 = [trace2];
+
+        var layout2 = {
+            title: 'Bubble Chart Hover Text',
+            showlegend: false,
+            // height: 600,
+            // width: 600
+        };
+
+        Plotly.newPlot('bubble', data2, layout2);
 
     };
 
