@@ -22,6 +22,28 @@ d3.json("samples.json").then((data) => {
     };
     console.log(sortedMetaData);
 
+    for (i = 0; i < sortedMetaData.length; i++) {
+
+        // Get the ID for the individual
+        let addID = sortedMetaData[i].id;
+
+        // get reference to select element
+        let sel = document.getElementById('selDataset');
+
+        // create new option element
+        let opt = document.createElement('option');
+
+        // create text node to add to option element (opt)
+        opt.appendChild(document.createTextNode(addID));
+
+        // set value property of opt
+        opt.value = addID;
+
+        // add opt to end of select box (sel)
+        sel.appendChild(opt);
+    };
+
+
     // Listen for dropdown menu selecting the patient number to chart
     d3.select('#selDataset').on('change', barChart);
 
@@ -88,7 +110,7 @@ d3.json("samples.json").then((data) => {
 
         // Bar chart layout
         let layout1 = {
-            title: "Belly Button Bacteria",
+            title: "Top 10 Belly Button Bacteria",
             // margin: {
             //     l: 100,
             //     r: 100,
@@ -108,7 +130,7 @@ d3.json("samples.json").then((data) => {
             mode: 'markers',
             marker: {
                 color: sortedTestData.map(object => object.otuID),
-                colorscale: 'Earth',
+                colorscale: 'Rainbow',
                 size: sortedTestData.map(object => object.sampleValue)
             }
         };
@@ -118,6 +140,8 @@ d3.json("samples.json").then((data) => {
         let layout2 = {
             title: 'Belly Button Bacteria',
             showlegend: false,
+            xaxis: { title: "OTU ID" },
+            yaxis: { title: "OTU Sample Values" }
             // height: 600,
             // width: 600
         };
@@ -144,14 +168,12 @@ d3.json("samples.json").then((data) => {
                     'rgb(227, 119, 194)', 'rgb(127, 127, 127)',
                     'rgb(188, 189, 34)', "white"
                 ],
-                colorscale: 'Earth'
             },
-            // labels: ["0-1", "1-2", "2-3", "3-4", "4-5", "5-6", "6-7", "7-8", "8-9", ""],
-            hoverinfo: ""
+            hoverinfo: 'skip'
         };
 
         let degrees = patientWfreq / 9 * 180,
-            radius = .5;
+            radius = .3;
         let radians = (180 - degrees) * Math.PI / 180;
         let x = radius * Math.cos(radians) + 0.5;
         let y = radius * Math.sin(radians) + 0.5;
@@ -164,8 +186,8 @@ d3.json("samples.json").then((data) => {
                 x1: x,
                 y1: y,
                 line: {
-                    color: 'black',
-                    width: 8
+                    color: 'red',
+                    width: 4
                 }
             }],
             title: 'Belly Button Washing Frequency',
