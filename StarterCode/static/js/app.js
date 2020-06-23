@@ -22,6 +22,7 @@ d3.json("samples.json").then((data) => {
     };
     console.log(sortedMetaData);
 
+    // Add the dropdown box select options
     for (i = 0; i < sortedMetaData.length; i++) {
 
         // Get the ID for the individual
@@ -97,7 +98,7 @@ d3.json("samples.json").then((data) => {
 
         // Bar chart layout
         let layout1 = {
-            title: "Top 10 Belly Button Bacteria",
+            title: "Top 10 Belly Button Microbial Species (OTU)",
         };
 
         // Plot the horizontal bar chart for the selected individual
@@ -122,7 +123,7 @@ d3.json("samples.json").then((data) => {
 
         // Bubble chart layout
         let layout2 = {
-            title: 'Belly Button Bacteria',
+            title: 'Belly Button Microbial Species (OTU)',
             showlegend: false,
             xaxis: { title: "OTU ID" },
             yaxis: { title: "OTU Sample Values" }
@@ -187,7 +188,7 @@ d3.json("samples.json").then((data) => {
                     }
                 }
             ],
-            title: 'Belly Button Washing Frequency',
+            title: 'Belly Button Weekly Washing Frequency',
             xaxis: { visible: false, range: [-1, 1] },
             yaxis: { visible: false, range: [-1, 1] }
         };
